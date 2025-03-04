@@ -1,0 +1,107 @@
+:root {
+    --bg-color: #ffffff;
+    --text-color: #333333;
+    --input-bg: #f5f5f5;
+    --button-bg: #4CAF50;
+    --dot-color1: #fff17680;
+    --dot-color2: #81c78480;
+}
+
+[data-theme="dark"] {
+    --bg-color: #2d2d2d;
+    --text-color: #ffffff;
+    --input-bg: #404040;
+    --button-bg: #45a049;
+    --dot-color1: #fff17640;
+    --dot-color2: #81c78440;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    transition: background-color 0.3s, color 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: -50px;
+    left: -50px;
+    right: -50px;
+    bottom: -50px;
+    background-image:
+        radial-gradient(var(--dot-color1) 15%, transparent 15%),
+        radial-gradient(var(--dot-color2) 15%, transparent 15%),
+        radial-gradient(white 10%, transparent 10%);
+    background-size: 100px 100px;
+    background-position: 0 0, 50px 50px, 0 50px;
+    filter: blur(5px);
+    z-index: -1;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    width: 350px;
+}
+
+.theme-switcher {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.theme-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    background: var(--input-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+input {
+    width: 95%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: var(--input-bg);
+    color: var(--text-color);
+    margin-top: 0.5rem;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background: var(--button-bg);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: filter 0.3s;
+}
+
+.error {
+    color: #ff4444;
+    font-size: 0.9rem;
+    margin-top: 0.3rem;
+    height: 1rem;
+}

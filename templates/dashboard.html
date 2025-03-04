@@ -1,0 +1,118 @@
+<!-- templates/dashboard.html -->
+<!DOCTYPE html>
+<html lang="zh" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="static/images/logo.ico" sizes="32x32">
+    <link href="/static/css/dashboard.css" rel="stylesheet">
+    <script src="/static/js/dashboard.js"></script>
+    <title>[系统管理]证书更新系统 By 又拍云</title>
+</head>
+<body onload="loadWebhookInfo()">
+    <div class="theme-switcher">
+        <button class="theme-btn" onclick="setTheme('light')">🌞</button>
+        <button class="theme-btn" onclick="setTheme('dark')">🌙</button>
+        <button class="theme-btn" onclick="setTheme('system')">💻</button>
+    </div>
+
+    <nav class="sidebar">
+        <button class="nav-button" onclick="showContent('cloud-config')">
+            ☁️ 又拍云账号配置
+        </button>
+        <button class="nav-button" onclick="showContent('logs')">
+            📜 运行日志
+        </button>
+        <button class="nav-button" onclick="showContent('change-pwd')">
+            🔑 修改密码
+        </button>
+        <button class="nav-button" onclick="showContent('system-webhook')">
+            📨 Webhook配置信息
+        </button>
+        <button class="nav-button" onclick="location.href='/login'">
+            🚪 账号注销
+        </button>
+    </nav>
+
+    <main class="main-content">
+        <!-- 又拍云账号配置 -->
+        <section id="cloud-config" class="content-section active">
+            <h2>又拍云账号配置</h2>
+            <p>说明：使用又拍云账号登录官网获取cookie，并上传证书。<p>
+            <div class="form-panel">
+                <form onsubmit="return" action="/cloud_account" method="post">
+                    <div class="form-group">
+                        <label>账号</label>
+                        <input type="text" id="username" name="username" value="{{ username }}" required>
+                        <div class="error" id="userError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>密码</label>
+                        <input type="password" id="password" name="password"  value="{{ password }}" required>
+                        <div class="error" id="pwdError"></div>
+                    </div>
+                    <div class="btn-group">
+                        <button type="submit" class="submit-btn" formaction="/account/save">保存配置</button>
+                        <button type="submit" class="submit-btn" formaction="/account/test">账号测试</button>
+                    </div>
+                    {{ testMsg }}
+                </form>
+            </div>
+        </section>
+
+        <!-- 运行日志 -->
+        <section id="logs" class="content-section">
+            <h2>运行日志</h2>
+            <div class="form-panel" style="display: flex; justify-content: center;">
+                <div id="log-content">
+                    <!-- 日志条目将动态加载到这里 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 修改密码 -->
+        <section id="change-pwd" class="content-section">
+            <h2>修改密码</h2>
+            <div class="form-panel">
+                <form onsubmit="return submitChangePwd(event)">
+                    <div class="form-group">
+                        <label>当前密码</label>
+                        <input type="password" id="old-pwd" required>
+                        <div class="error" id="oldPwdError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>新密码</label>
+                        <input type="password" id="new-pwd" required>
+                        <div class="error" id="newPwdError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>确认密码</label>
+                        <input type="password" id="confirm-pwd" required>
+                        <div class="error" id="confirmPwdError"></div>
+                    </div>
+                    <button type="submit" class="submit-btn">确认修改</button>
+                    <div id="changePwdMsg"></div> <!-- 用于显示修改密码的消息 -->
+                </form>
+            </div>
+        </section>
+
+        <!-- Webhook配置 -->
+        <section id="system-webhook" class="content-section">
+            <h2>Webhook配置信息</h2>
+            <div class="form-panel">
+                <form onsubmit="return submitWebhook(event)">
+                    <div class="form-group">
+                        <label>接收Webhook url示例：</label>
+                        <input type="text" id="webhook-url" readonly>
+                        <div class="error" id="webhookUrlError"></div>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" onclick="testWebhook()">测试 Webhook 是否正常！</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+    </main>
+</body>
+</html>

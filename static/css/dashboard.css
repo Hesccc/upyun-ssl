@@ -1,0 +1,226 @@
+:root {
+    --bg-color: #ffffff;
+    --text-color: #333333;
+    --input-bg: #f5f5f5;
+    --button-bg: #4CAF50;
+    --dot-color1: #fff17680;
+    --dot-color2: #81c78480;
+    --sidebar-bg: rgba(245, 245, 245, 0.9);
+    --log-content-height: 70vh; /* 新增日志输出框高度变量 */
+}
+
+[data-theme="dark"] {
+    --bg-color: #2d2d2d;
+    --text-color: #ffffff;
+    --input-bg: #404040;
+    --button-bg: #45a049;
+    --dot-color1: #fff17640;
+    --dot-color2: #81c78440;
+    --sidebar-bg: rgba(64, 64, 64, 0.9);
+    --input-text-color: #ffffff; /* 新增文本颜色变量 */
+    --input-bg-color: #505050; /* 调整背景颜色增强对比度 */
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    transition: background-color 0.3s, color 0.3s;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: -50px;
+    left: -50px;
+    right: -50px;
+    bottom: -50px;
+    background-image:
+        radial-gradient(var(--dot-color1) 15%, transparent 15%),
+        radial-gradient(var(--dot-color2) 15%, transparent 15%),
+        radial-gradient(white 10%, transparent 10%);
+    background-size: 100px 100px;
+    background-position: 0 0, 50px 50px, 0 50px;
+    filter: blur(5px);
+    z-index: -1;
+}
+
+/* 侧边栏样式 */
+.sidebar {
+    width: 260px;
+    background: var(--sidebar-bg);
+    padding: 20px;
+    backdrop-filter: blur(8px);
+    border-right: 1px solid rgba(0,0,0,0.1);
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+.nav-button {
+    width: 100%;
+    padding: 14px;
+    margin: 8px 0;
+    background: var(--input-bg);
+    color: var(--text-color);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-button:hover {
+    transform: translateX(5px);
+    background: var(--button-bg);
+    color: white;
+}
+
+/* 内容区域 */
+.main-content {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(4px);
+}
+
+.content-section {
+    display: none;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.content-section.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+/* 表单样式 */
+.form-panel {
+    background: var(--input-bg);
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background: var(--input-bg-color, rgba(255,255,255,0.9)); /* 使用新变量 */
+    color: var(--input-text-color, var(--text-color)); /* 使用专用文本颜色 */
+    margin-top: 8px;
+    transition: all 0.3s ease; /* 添加过渡效果 */
+}
+
+.submit-btn {
+    background: var(--button-bg);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: auto;
+    float: right;
+}
+
+.error {
+    color: #ff4444;
+    font-size: 0.85rem;
+    height: 1.2rem;
+    margin-top: 4px;
+}
+
+/* 主题切换 */
+.theme-switcher {
+    z-index: 9999; /* 确保在最顶层 */
+    pointer-events: auto; /* 重要 强制启用点击 */
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--input-bg);
+    border-radius: 20px;
+    padding: 6px;
+    display: flex;
+    gap: 5px;
+}
+
+/* 增加聚焦状态样式 */
+input:focus {
+    outline: 2px solid var(--button-bg);
+    box-shadow: 0 0 8px var(--button-bg);
+}
+
+/* 占位符文字颜色适配 */
+input::placeholder {
+    color: color-mix(in srgb, var(--input-text-color) 70%, transparent);
+}
+
+/* 禁用状态样式 */
+input:disabled {
+    background: color-mix(in srgb, var(--input-bg-color) 90%, #808080);
+    cursor: not-allowed;
+}
+
+.theme-btn {
+    position: relative; /* 创建新的堆叠上下文 */
+    pointer-events: auto;
+    transition: all 0.2s ease;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 15px;
+    background: transparent;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+/* 修复可能覆盖按钮的元素 */
+.background {
+    pointer-events: none; /* 禁止背景拦截点击 */
+}
+.theme-btn.active {
+    background: var(--button-bg);
+    color: white;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.btn-group {
+  display: flex;
+  gap: 15px; /* 按钮间距 */
+}
+
+#log-content {
+    background-color: var(--bg-color);
+    padding: 15px;
+    border-radius: 8px;
+    font-family: monospace;
+    height: var(--log-content-height); /* 使用新的高度变量 */
+    width: auto; /* 设置宽度 */
+    overflow-y: auto;
+    margin: 0 auto; /* 居中 */
+    resize: both; /* 允许通过鼠标调整大小 */
+    overflow: auto; /* 确保内容可滚动 */
+}
+
+.log-entry {
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-color);
+}
