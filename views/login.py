@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, session, url_for, redirect
-from tools.authcheck import auth, generate_session_id
-from tools.initDB import getDB
+from models.auth_check import auth, generate_session_id
+from models.init_db import getDB
 from werkzeug.security import check_password_hash
 
 from models import logs   # 加载日志模型
@@ -9,8 +9,8 @@ log = logs.configuration()  # 全局初始化日志记录对象
 blue_auth = Blueprint("blue_auth", __name__)
 
 # 登录
-@blue_auth.route('/')
 @blue_auth.route('/login', methods=['GET', 'POST'])
+@blue_auth.route('/')
 def login():
     if request.method == "GET":
         return render_template("login.html")

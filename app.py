@@ -1,7 +1,7 @@
 import os
 from flask import Flask
 from datetime import timedelta
-from tools.initDB import init_db  # 导入数据库初始化函数
+from models.init_db import init_db  # 导入数据库初始化函数
 
 from views.login import blue_auth
 from views.dashboard import blue_dashboard
@@ -24,4 +24,4 @@ app.register_blueprint(blueprint=blue_dashboard)  # 管理配置蓝图
 app.register_blueprint(blueprint=blue_core)  # 核心功能蓝图
 
 if __name__ == '__main__':
-    app.run(port=5000, host='0.0.0.0')
+    app.run(debug=True, port=5000, host='0.0.0.0')

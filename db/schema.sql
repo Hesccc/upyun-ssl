@@ -10,6 +10,6 @@ CREATE TABLE IF NOT EXISTS users (
 -- 云账户配置表
 CREATE TABLE IF NOT EXISTS cloud_config (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    cloud_user NOT NULL,
-    cloud_pass NOT NULL
+    cloud_user TEXT UNIQUE NOT NULL,
+    cloud_pass TEXT NOT NULL
 );

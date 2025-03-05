@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, url_for, redirect, jsonify, session
-from tools.authcheck import auth
-from tools.initDB import getDB
-from tools.password import encrypt_password, decrypt_password
+from models.auth_check import auth
+from models.init_db import getDB
+from models.password import encrypt_password, decrypt_password
 from werkzeug.security import generate_password_hash, check_password_hash
 import socket
 
@@ -15,9 +15,11 @@ blue_dashboard = Blueprint("blue_dashboard", __name__)  # 创建蓝图
 @auth
 def dashboard():
     db = getDB()  # 获取数据对象
-    user = db.execute('SELECT * FROM cloud_config LIMIT 1;').fetchone()  # 搜索数据库，获取账号密码
-    db.commit()  # 提交数据库操作
-    return render_template("dashboard.html",username=user[1], password=decrypt_password(user[2]))
+    cloud_user = db.execute('SELECT * FROM cloud_config LIMIT 1;').fetchone()
+    if cloud_user:
+        return render_template("dashboard.html",username=cloud_user[1], password=decrypt_password(cloud_user[2]))
+    else:
+        return render_template("dashboard.html", username="", password="")
 
 
 @blue_dashboard.route('/account/save', methods=['POST','GET'])
