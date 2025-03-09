@@ -27,7 +27,7 @@ def webhook():
             # 获取接收到的消息内容
             message = request.json
 
-            # 获取证书内容
+            # 从webhook发送的数据中获取证书内容
             certificate = {
                 "certificate": message["cert"],
                 "private_key": message["privkey"]

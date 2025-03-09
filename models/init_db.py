@@ -21,7 +21,7 @@ def init_db(app):
         cursor = db.cursor()
         cursor.execute('SELECT * FROM users WHERE username = ?', ['admin'])
         if not cursor.fetchone():
-            cursor.execute('INSERT INTO users (username, password) VALUES (?, ?)',['admin', generate_password_hash('admin@123')])
+            cursor.execute('INSERT INTO users (username, password) VALUES (?, ?)',['admin', generate_password_hash('adminadmin')])
         db.commit()
     return db
 

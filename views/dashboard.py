@@ -117,22 +117,16 @@ def change_password():
 # webhooks接口信息
 @blue_dashboard.route('/api/WebhookInfo', methods=['GET'])
 @auth
-def WebhookInfo():
+def webhook_info():
     try:
         # 获取服务器的IP地址
         hostname = socket.gethostname()
         server_ip = socket.gethostbyname(hostname)
-
         # 获取Flask运行的端口
         server_port = request.host.split(':')[1]
-        # 生成一个随机的token
+        # Webhook Auth token
         token = 'f8e2c3a4-2ccf-4b57-86fa-027f1e91a5ac'
         webhook_url = f"http://{server_ip}:{server_port}/api/webhook?token={token}"
-
-        log.info(f"[webhook]✌️获取Webhook信息成功: {webhook_url}")
-
         return jsonify({'success': True, 'webhook_url': webhook_url})
     except Exception as e:
-        log.warn(f"[webhook]🙌获取Webhook信息失败!: {str(e)}")
-
         return jsonify({'success': False, 'message': str(e)})

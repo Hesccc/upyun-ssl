@@ -1,9 +1,9 @@
 from models import logs
-import json
-import requests
+import json, requests
 
 # 全局初始化日志记录对象
 log = logs.configuration()
+
 
 # 使用账号密码登录，获取cookies
 def login(username: str, password: str):
@@ -31,19 +31,21 @@ def login(username: str, password: str):
         'username': username,
         'password': password,
     }
+
     try:
         response = session.post(url=url, headers=headers, json=user).json()
 
         # 判断返回的内容是否为正常登录返回的结果
         if response['data']['result']:
             cookies = session.cookies.get_dict()
-            log.info("Successfully logged in to upyun.com! Retrieved cookies: " + json.dumps(cookies, ensure_ascii=False))
+            log.info("[upyun]✌️Successfully logged in to upyun.com! Retrieved cookies: " + json.dumps(cookies, ensure_ascii=False))
             return cookies
         else:
             log.info("Failed to log in to upyun.com! No cookies retrieved, returning None. Reason for failure: " + json.dumps(response, ensure_ascii=False))
             return None
     except Exception as e:
         log.error(e)
+
 
 # 上传证书
 def upload_cert(cookies: dict, certificate:dict):
@@ -66,12 +68,13 @@ def upload_cert(cookies: dict, certificate:dict):
     try:
         # 上传证书内容
         response = requests.post(url=url, cookies=cookies, headers=headers, json=certificate).json()
-        log.info("Certificate successfully uploaded, certificate ID: " + response['data']['result']['certificate_id'])
+        log.info("[upyun]✌️Certificate successfully uploaded, certificate ID: " + response['data']['result']['certificate_id'])
         # 返回证书ID
         return response['data']['result']['certificate_id']
 
     except Exception as e:
         log.error(e)
+
 
 # 迁移证书
 def migrate_cert(old_certid: str, new_certid: str, cookies: dict):
@@ -99,6 +102,7 @@ def migrate_cert(old_certid: str, new_certid: str, cookies: dict):
 
     response = requests.post(url, cookies=cookies, headers=headers, json=migrate_certificate).json()
     return response
+
 
 # 获取证书列表，检索到正在使用的证书ID
 def list_cert(cookies: dict):
@@ -130,10 +134,10 @@ def list_cert(cookies: dict):
             # 找到拥有最小过期时间的项，最小过期时间的项为old证书。
             min_end_date_item = min(filtered_items, key=lambda x: x[1].get('validity', {}).get('end', 0))
             old_certid = min_end_date_item[0]
-            log.info("Successfully retrieved the ID of the certificate in use, certificate ID: " + str(old_certid))
+            log.info("[upyun]✌️Successfully retrieved the ID of the certificate in use, certificate ID: " + str(old_certid))
             return old_certid
         else:
-            log.error("Failed to retrieve the ID of the certificate in use! Please check the configuration on upyun.com")
+            log.error("[upyun]🙌Failed to retrieve the ID of the certificate in use! Please check the configuration on upyun.com")
             return None
     except Exception as e:
         log.error(e)
